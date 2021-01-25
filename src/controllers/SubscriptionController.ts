@@ -25,6 +25,27 @@ export default {
     },
 
     async create(request: Request, response: Response) {
+        
+        const transformData = (value: any, originalValue: any) => {
+            const parsedDate = isDate(originalValue)
+                ? originalValue
+                : parse(originalValue, "dd/MM/yyyy", new Date());
+                
+            return parsedDate;
+        }
+
+        const testDate = (nascimento?: Date) => {
+            const cutoff = new Date();
+            let data = new Date();
+            
+            cutoff.setFullYear(cutoff.getFullYear() - 18);
+            
+            if (nascimento)
+                data = nascimento;
+            
+            return data <= cutoff;
+        }
+
         const {
             name,
             email,
@@ -47,32 +68,25 @@ export default {
                     .required("O e-mail é obrigatório"),
                 nascimento: Yup
                     .date()
-                    .transform((value, originalValue) => {
-                        const parsedDate = isDate(originalValue)
-                            ? originalValue
-                            : parse(originalValue, "dd/MM/yyyy", new Date());
-                        
-                        return parsedDate;
-                    })
-                    .test("nascimento", "Você deve ser maior de 18 anos", function(nascimento) {
-                        const cutoff = new Date();
-                        let data = new Date();
-                        
-                        cutoff.setFullYear(cutoff.getFullYear() - 18);
-                        
-                        if (nascimento)
-                            data = nascimento;
-                        
-                        return data <= cutoff;
-                    })
+                    .transform(transformData)
+                    .test("nascimento", "Você deve ser maior de 18 anos", testDate)
                     .required('Informe a sua data de nascimento'),
             });
     
-            await schema.validate(data, {
+            const validatedData = await schema.validate(data, {
                 abortEarly: false,
             });
+
+            const subscription = subscriptionRepository.create({
+                name: validatedData.name,
+                email: validatedData.email,
+                nascimento: validatedData.nascimento
+            });
+        
+            await subscriptionRepository.save(subscription);
+        
+            return response.status(201).json();
         } catch (error) {
-            console.log('Saída: ', error);
             if (error instanceof Yup.ValidationError) {
                 let errors: ValidationErrors = {};
 
@@ -84,16 +98,5 @@ export default {
                 return response.status(400).json({ message: 'Validation fails', errors });
             }
         }
-    
-    
-        const subscription = subscriptionRepository.create({
-            name,
-            email,
-            nascimento
-        });
-    
-        await subscriptionRepository.save(subscription);
-    
-        return response.status(201).json();
     }
 }

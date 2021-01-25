@@ -1,5 +1,8 @@
 import express from 'express';
 import cors from 'cors';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 import './database/connection';
 
@@ -11,4 +14,4 @@ app.use(cors());
 app.use(express.json());
 app.use(routes);
 
-app.listen(3333);
+app.listen(process.env.SERVER_PORT || 3333);
