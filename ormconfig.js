@@ -8,12 +8,12 @@ module.exports = {
     "synchronize": true,
     "logging": false,
     "migrations": [
-        "./src/database/migrations/*.ts"
+        process.env.PATH_MIGRATION
     ],
     "entities": [
-        "./src/models/*.ts"
+        process.env.PATH_ENTITIES
     ],
     "cli": {
-        "migrationsDir": "./src/database/migrations"
+        "migrationsDir": process.env.PATH_MIGRATION_DIR
     }
 }

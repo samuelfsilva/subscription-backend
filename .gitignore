@@ -4,6 +4,8 @@ dist
 
 src/database/database.sqlite
 .env
+.env.development
+.env.production
 
 package-lock.json
 *.log
