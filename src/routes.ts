@@ -3,7 +3,7 @@ import SubscriptionController from './controllers/SubscriptionController';
 
 const routes = Router();
 
-routes.get('/subscribe', SubscriptionController.index);
-routes.post('/subscribe', SubscriptionController.create);
+routes.get('/data/subscribe', SubscriptionController.index);
+routes.post('/data/subscribe', SubscriptionController.create);
 
 export default routes;

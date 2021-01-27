@@ -8,12 +8,12 @@ module.exports = {
     "synchronize": true,
     "logging": false,
     "migrations": [
-        process.env.PATH_MIGRATION
+        __dirname + process.env.PATH_MIGRATION
     ],
     "entities": [
-        process.env.PATH_ENTITIES
+        __dirname + process.env.PATH_ENTITIES
     ],
     "cli": {
-        "migrationsDir": process.env.PATH_MIGRATION_DIR
+        "migrationsDir": __dirname + process.env.PATH_MIGRATION_DIR
     }
 }
