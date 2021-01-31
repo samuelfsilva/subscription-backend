@@ -62,7 +62,11 @@ export default {
 
         try {
             const schema = Yup.object().shape({
-                name: Yup.string().required("O nome é obrigatório"),
+                name: Yup
+                    .string()
+                    .strict(false)
+                    .trim('O nome não pode começar ou acabar com espaço')
+                    .required("O nome é obrigatório"),
                 email: Yup.string()
                     .email("Digite um e-mail válido")
                     .required("O e-mail é obrigatório"),
