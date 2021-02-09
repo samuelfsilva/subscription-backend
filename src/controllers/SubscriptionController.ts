@@ -68,12 +68,13 @@ export default {
                     .trim('O nome não pode começar ou acabar com espaço')
                     .required("O nome é obrigatório"),
                 email: Yup.string()
-                    .email("Digite um e-mail válido")
+                    .email('Digite um e-mail válido')
                     .required("O e-mail é obrigatório"),
                 nascimento: Yup
                     .date()
                     .transform(transformData)
-                    .test("nascimento", "Você deve ser maior de 18 anos", testDate)
+                    .test('nascimento', 'Você deve ser maior de 18 anos', testDate)
+                    .max(new Date(), 'Não é possível incluir uma data futura')
                     .required('Informe a sua data de nascimento'),
             });
     
